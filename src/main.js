@@ -28,5 +28,5 @@ function list(element, entries) {
   }
 }
 
-fetchJSON('/state').then(state =>
-  list(document.getElementById('entries'), state.entries))
+fetchJSON('/entries').then(data =>
+  list(document.getElementById('entries'), data.entries))
