@@ -1,6 +1,5 @@
 const fs = require('fs')
 const path = require('path')
-const bodyParser = require('body-parser')
 const express = require('express')
 const app = express()
 const port = 3000
@@ -13,6 +12,6 @@ app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'src', 'index.html'
 
 app.get('/entries', (req, res) => res.json(entries))
 
-app.use(bodyParser.json())
+app.use(express.json())
 
 app.listen(port)
