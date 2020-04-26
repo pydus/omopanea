@@ -10,14 +10,14 @@ body {
   color: rgb(218, 218, 218);
 }
 
-.input {
+main {
   margin: auto;
   padding: 0 10%;
   max-width: 1080px;
 }
 
 @media (max-width: 760px) {
-  .input {
+  main {
     padding: 0;
   }
 }
@@ -37,6 +37,10 @@ body {
   overflow: hidden;
 }
 
+textarea:not(:focus) {
+  resize: none;
+}
+
 textarea:focus {
   height: 160px;
   overflow-y: visible;
@@ -44,4 +48,14 @@ textarea:focus {
 
 .input input {
   border-color: rgb(238, 167, 34);
+}
+
+#entries .date {
+  display: inline;
+  color: rgb(238, 167, 34);
+}
+
+#entries .tags {
+  display: inline;
+  color: rgb(34, 156, 238);
 }
