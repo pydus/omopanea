@@ -2,6 +2,8 @@ const tagsElement = document.getElementById('tags')
 const contentElement = document.getElementById('content')
 const entriesElement = document.getElementById('entries')
 
+let entries = []
+
 async function fetchJSON(url) {
   return fetch(url)
     .then(response => response.json())
@@ -55,6 +57,12 @@ function addEntries(element, entries) {
   }
 }
 
+function updateEntries(newEntries) {
+  entries = newEntries
+  entriesElement.innerHTML = ''
+  addEntries(entriesElement, entries)
+}
+
 function postEntry(entry) {
   fetch('/entries', {
     method: 'POST',
@@ -81,6 +89,7 @@ function addContentElementListeners() {
 
       if (content.length > 0) {
         const entry = Entry(tags, content)
+        entries.push(entry)
         addEntry(entriesElement, entry)
         postEntry(entry)
         contentElement.value = ''
@@ -95,7 +104,9 @@ function addContentElementListeners() {
   })
 }
 
-addContentElementListeners()
+function init() {
+  addContentElementListeners()
+  fetchJSON('/entries').then(newEntries => updateEntries(newEntries))
+}
 
-fetchJSON('/entries').then(entries =>
-  addEntries(entriesElement, entries))
+init()
