@@ -12,14 +12,14 @@ function Entry(tags, content) {
     tags,
     content,
     dateCreated: Date.now(),
-    dateEdited: null
+    dateEdited: Date.now()
   }
 }
 
 function EntryView(entry) {
   return `
     <div class="entry">
-      <div class="date">${(new Date(entry.dateEdited || entry.dateCreated)).toDateString()}</div>
+      <div class="date">${(new Date(entry.dateEdited)).toDateString()}</div>
       <div class="tags" contenteditable>${entry.tags.join(', ')}</div>
       <div class="content" contenteditable>${entry.content}</div>
     </div>
