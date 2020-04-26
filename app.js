@@ -4,7 +4,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 
-const entries = require('./server/entries.json')
+const entries = require('./store/entries.json')
 
 app.use(express.static('src'))
 
@@ -17,7 +17,7 @@ app.use(express.json())
 app.post('/entries', (req, res) => {
   entries.push(req.body)
 
-  fs.writeFile('server/entries.json', JSON.stringify(entries), err => {
+  fs.writeFile('store/entries.json', JSON.stringify(entries), err => {
     if (err) {
       res.sendStatus(500)
     } else {
