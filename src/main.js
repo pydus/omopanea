@@ -16,10 +16,29 @@ function Entry(tags, content) {
   }
 }
 
+function getDateTimeString(date) {
+  let dateString = date.toDateString()
+  const otherDate = new Date(Date.now())
+
+  if (dateString === otherDate.toDateString()) {
+    dateString = 'Today'
+  }
+
+  otherDate.setDate(otherDate.getDate() - 1)
+
+  if (dateString === otherDate.toDateString()) {
+    dateString = 'Yesterday'
+  }
+
+  const timeString = date.toTimeString().slice(0, 5)
+
+  return `${dateString} ${timeString}`
+}
+
 function EntryView(entry) {
   return `
     <div class="entry">
-      <div class="date">${(new Date(entry.dateEdited)).toDateString()}</div>
+      <div class="date">${getDateTimeString(new Date(entry.dateEdited))}</div>
       <div class="tags" contenteditable>${entry.tags.join(', ')}</div>
       <div class="content" contenteditable>${entry.content}</div>
     </div>
