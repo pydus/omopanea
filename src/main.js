@@ -1,5 +1,5 @@
-async function fetchState() {
-  return fetch('/state')
+async function fetchJSON(url) {
+  return fetch(url)
     .then(response => response.json())
 }
 
@@ -28,5 +28,5 @@ function list(element, entries) {
   }
 }
 
-fetchState().then(state =>
+fetchJSON('/state').then(state =>
   list(document.getElementById('entries'), state.entries))
