@@ -57,10 +57,15 @@ function addEntries(element, entries) {
   }
 }
 
+function displayEntries(entries) {
+  entriesElement.innerHTML = ''
+  addEntries(entriesElement, entries)
+}
+
 function updateEntries(newEntries) {
   entries = newEntries
   entriesElement.innerHTML = ''
-  addEntries(entriesElement, entries)
+  displayFilteredEntries(entries)
 }
 
 function postEntry(entry) {
@@ -73,6 +78,14 @@ function postEntry(entry) {
   })
 }
 
+function getTags() {
+  return tagsElement.value === '' ?
+    [] : tagsElement.value
+    .toLowerCase()
+    .split(',')
+    .map(tag => tag.trim())
+}
+
 function addContentElementListeners() {
   let controlIsDown = false
 
@@ -80,11 +93,7 @@ function addContentElementListeners() {
     if (e.key === 'Control') {
       controlIsDown = true
     } else if (e.key === 'Enter' && controlIsDown) {
-      const tags = tagsElement.value
-        .split(',')
-        .map(tag => tag.trim())
-        .filter(tag => tag.length > 0)
-
+      const tags = getTags()
       const content = contentElement.value
 
       if (content.length > 0) {
@@ -104,8 +113,37 @@ function addContentElementListeners() {
   })
 }
 
+function tagFilter(tags, entries) {
+  if (tags.length < 1) {
+    return entries
+  }
+
+  return entries.filter(entry => {
+    for (const tag of tags) {
+      if (entry.tags.includes(tag)) {
+        return true
+      }
+    }
+
+    return false
+  })
+}
+
+function displayFilteredEntries(entries) {
+  const tags = getTags()
+  const filteredEntries = tagFilter(tags, entries)
+  displayEntries(filteredEntries)
+}
+
+function addTagsElementListeners() {
+  tagsElement.addEventListener('keyup', () => {
+    displayFilteredEntries(entries)
+  })
+}
+
 function init() {
   addContentElementListeners()
+  addTagsElementListeners()
   fetchJSON('/entries').then(newEntries => updateEntries(newEntries))
 }
 
