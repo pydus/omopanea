@@ -22,11 +22,11 @@ function EntryView(entry) {
   `
 }
 
-function list(element, entries) {
+function listEntries(element, entries) {
   for (const entry of entries) {
     element.innerHTML += EntryView(entry)
   }
 }
 
 fetchJSON('/entries').then(data =>
-  list(document.getElementById('entries'), data.entries))
+  listEntries(document.getElementById('entries'), data.entries))
