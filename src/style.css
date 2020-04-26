@@ -1,0 +1,47 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: rgb(29, 29, 29);
+  font-size: 19px;
+  font-family: 'Courier New', Courier, monospace;
+  line-height: 2;
+  color: rgb(218, 218, 218);
+}
+
+.input {
+  margin: auto;
+  padding: 0 10%;
+  max-width: 1080px;
+}
+
+@media (max-width: 760px) {
+  .input {
+    padding: 0;
+  }
+}
+
+.input input, .input textarea {
+  height: 38px;
+  min-height: 38px;
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 4px;
+  min-width: 100%;
+  max-width: 100%;
+  border-left: rgb(34, 156, 238) solid 3px;
+  overflow: hidden;
+}
+
+textarea:focus {
+  height: 160px;
+  overflow-y: visible;
+}
+
+.input input {
+  border-color: rgb(238, 167, 34);
+}
