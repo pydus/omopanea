@@ -27,10 +27,10 @@ function EntryView(entry) {
 }
 
 function addEntry(element, entry) {
-  element.innerHTML += EntryView(entry)
+  element.innerHTML = EntryView(entry) + element.innerHTML
 }
 
-function listEntries(element, entries) {
+function addEntries(element, entries) {
   for (const entry of entries) {
     addEntry(element, entry)
   }
@@ -79,4 +79,4 @@ function addContentElementListeners() {
 addContentElementListeners()
 
 fetchJSON('/entries').then(entries =>
-  listEntries(entriesElement, entries))
+  addEntries(entriesElement, entries))
