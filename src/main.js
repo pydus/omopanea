@@ -36,6 +36,16 @@ function listEntries(element, entries) {
   }
 }
 
+function postEntry(entry) {
+  fetch('/entries', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(entry)
+  })
+}
+
 function addContentElementListeners() {
   let controlIsDown = false
 
@@ -53,6 +63,7 @@ function addContentElementListeners() {
       if (content.length > 0) {
         const entry = Entry(tags, content)
         addEntry(entriesElement, entry)
+        postEntry(entry)
         contentElement.value = ''
       }
     }
@@ -67,5 +78,5 @@ function addContentElementListeners() {
 
 addContentElementListeners()
 
-fetchJSON('/entries').then(data =>
-  listEntries(entriesElement, data.entries))
+fetchJSON('/entries').then(entries =>
+  listEntries(entriesElement, entries))

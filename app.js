@@ -14,4 +14,16 @@ app.get('/entries', (req, res) => res.json(entries))
 
 app.use(express.json())
 
+app.post('/entries', (req, res) => {
+  entries.push(req.body)
+
+  fs.writeFile('server/entries.json', JSON.stringify(entries), err => {
+    if (err) {
+      res.sendStatus(500)
+    } else {
+      res.sendStatus(200)
+    }
+  })
+})
+
 app.listen(port)
