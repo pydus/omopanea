@@ -96,14 +96,14 @@ function addContentElementListeners() {
     } else if (e.key === 'Enter' && controlIsDown) {
       const tags = getTags()
       const content = contentElement.value
+      const entry = Entry(tags, content)
 
-      if (content.length > 0) {
-        const entry = Entry(tags, content)
-        entries.push(entry)
-        addEntry(entriesElement, entry)
-        postEntry(entry)
-        contentElement.value = ''
-      }
+      entries.push(entry)
+
+      addEntry(entriesElement, entry)
+      postEntry(entry)
+
+      contentElement.value = ''
     }
   })
 
