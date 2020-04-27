@@ -37,6 +37,15 @@ main {
   overflow: hidden;
 }
 
+.content, .date {
+  border-left: transparent solid 3px;
+  padding: 0 4px;
+}
+
+.content:focus {
+  border-left: rgb(34, 156, 238) solid 3px;
+}
+
 textarea:not(:focus) {
   resize: none;
 }
