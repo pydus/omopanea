@@ -84,6 +84,7 @@ function getTags() {
     .toLowerCase()
     .split(',')
     .map(tag => tag.trim())
+    .filter(tag => tag.length > 0)
 }
 
 function addContentElementListeners() {
@@ -120,10 +121,12 @@ function tagFilter(tags, entries) {
 
   return entries.filter(entry => {
     for (const tag of tags) {
-      if (entry.tags.includes(tag) || tag === '' && entry.tags.length === 0) {
-        return true
+      if (!entry.tags.includes(tag)) {
+        return false
       }
     }
+
+    return true
   })
 }
 
