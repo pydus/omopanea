@@ -120,12 +120,10 @@ function tagFilter(tags, entries) {
 
   return entries.filter(entry => {
     for (const tag of tags) {
-      if (entry.tags.includes(tag)) {
+      if (entry.tags.includes(tag) || tag === '' && entry.tags.length === 0) {
         return true
       }
     }
-
-    return false
   })
 }
 
