@@ -37,6 +37,10 @@ main {
   overflow: hidden;
 }
 
+.content {
+  white-space: pre-line;
+}
+
 .content, .date {
   border-left: transparent solid 3px;
   padding: 0 4px;
