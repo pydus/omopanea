@@ -40,12 +40,20 @@ function getDateTimeString(date) {
 
 function EntryView(entry) {
   return `
-    <div class="entry">
+    <div class="entry" id=${entry.id}>
       <div class="date">${getDateTimeString(new Date(entry.dateEdited))}</div>
       <div class="tags" contenteditable>${entry.tags.join(', ')}</div>
       <div class="content" contenteditable>${entry.content}</div>
     </div>
   `
+}
+
+function findEntry(id) {
+  for (const entry of entries) {
+    if (entry.id === Number(id)) {
+      return entry
+    }
+  }
 }
 
 function addEntry(element, entry) {
@@ -72,6 +80,16 @@ function updateEntries(newEntries) {
 function postEntry(entry) {
   return fetch('/entries', {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(entry)
+  })
+}
+
+function editEntry(entry) {
+  return fetch('/entries', {
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
     },
@@ -146,9 +164,24 @@ function addTagsElementListeners() {
   })
 }
 
+function addEntriesListeners() {
+  const entriesElement = document.getElementById('entries')
+  
+  entriesElement.addEventListener('keyup', e => {
+    const id = e.target.parentNode.id
+    const newContent = e.target.innerText
+    const entry = findEntry(id)
+
+    entry.content = newContent
+
+    editEntry(entry)
+  })
+}
+
 function init() {
   addContentElementListeners()
   addTagsElementListeners()
+  addEntriesListeners()
   fetchJSON('/entries').then(updateEntries)
 }
 
