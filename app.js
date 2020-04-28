@@ -56,6 +56,8 @@ app.put('/entries', (req, res) => {
   const [ i ] = findEntry(entry.id)
 
   if (i !== null) {
+    entry.dateEdited = Date.now()
+
     entries[i] = entry
 
     writeEntries().then(err => {
