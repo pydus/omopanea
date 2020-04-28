@@ -28,7 +28,7 @@ app.post('/entries', (req, res) => {
     if (err) {
       res.sendStatus(500)
     } else {
-      res.sendStatus(200)
+      res.json({ id: newEntry.id })
     }
   })
 })

@@ -70,7 +70,7 @@ function updateEntries(newEntries) {
 }
 
 function postEntry(entry) {
-  fetch('/entries', {
+  return fetch('/entries', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -102,7 +102,10 @@ function addContentElementListeners() {
       entries.push(entry)
 
       addEntry(entriesElement, entry)
+
       postEntry(entry)
+        .then(response => response.json())
+        .then(data => entry.id = data.id)
 
       contentElement.value = ''
     }
