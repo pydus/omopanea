@@ -145,7 +145,7 @@ function addTagsElementListeners() {
 function init() {
   addContentElementListeners()
   addTagsElementListeners()
-  fetchJSON('/entries').then(newEntries => updateEntries(newEntries))
+  fetchJSON('/entries').then(updateEntries)
 }
 
 init()
