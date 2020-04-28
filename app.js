@@ -24,10 +24,12 @@ function writeEntries() {
 
 function findEntry(id) {
   for (const [ i, entry ] of entries.entries()) {
-    if (entries[i].id === id) {
+    if (entries[i].id === Number(id)) {
       return [ i, entry ]
     }
   }
+
+  return [ null, null ]
 }
 
 app.get('/entries', (req, res) => res.json(entries))
@@ -53,7 +55,7 @@ app.put('/entries', (req, res) => {
 
   const [ i ] = findEntry(entry.id)
 
-  if (typeof i !== 'undefined') {
+  if (i !== null) {
     entries[i] = entry
 
     writeEntries().then(err => {
@@ -63,6 +65,26 @@ app.put('/entries', (req, res) => {
         res.sendStatus(200)
       }
     })
+  } else {
+    res.sendStatus(400)
+  }
+})
+
+app.delete('/entries', (req, res) => {
+  const [ i ] = findEntry(req.body.id)
+
+  if (i !== null) {
+    entries.splice(i, 1)
+
+    writeEntries().then(err => {
+      if (err) {
+        res.sendStatus(500)
+      } else {
+        res.sendStatus(200)
+      }
+    })
+  } else {
+    res.sendStatus(400)
   }
 })
 
