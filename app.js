@@ -11,9 +11,26 @@ app.use(express.static('src'))
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'src', 'index.html')))
 
-app.get('/entries', (req, res) => res.json(entries))
-
 app.use(express.json())
+
+function writeEntries() {
+  const newEntriesStoreString = JSON.stringify(entriesStore)
+
+  return new Promise(resolve =>
+    fs.writeFile('store/entries.json', newEntriesStoreString, err => {
+      resolve(err)
+    }))
+}
+
+function findEntry(id) {
+  for (const [ i, entry ] of entries.entries()) {
+    if (entries[i].id === id) {
+      return [ i, entry ]
+    }
+  }
+}
+
+app.get('/entries', (req, res) => res.json(entries))
 
 app.post('/entries', (req, res) => {
   const newEntry = req.body
@@ -22,15 +39,31 @@ app.post('/entries', (req, res) => {
 
   entries.push(req.body)
 
-  const newEntriesStoreString = JSON.stringify(entriesStore)
-
-  fs.writeFile('store/entries.json', newEntriesStoreString, err => {
+  writeEntries().then(err => {
     if (err) {
       res.sendStatus(500)
     } else {
       res.json({ id: newEntry.id })
     }
   })
+})
+
+app.put('/entries', (req, res) => {
+  const entry = req.body
+
+  const [ i ] = findEntry(entry.id)
+
+  if (typeof i !== 'undefined') {
+    entries[i] = entry
+
+    writeEntries().then(err => {
+      if (err) {
+        res.sendStatus(500)
+      } else {
+        res.sendStatus(200)
+      }
+    })
+  }
 })
 
 app.listen(port)
