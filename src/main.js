@@ -19,7 +19,8 @@ function Entry(tags, content) {
   }
 }
 
-function getDateTimeString(date) {
+function getDateTimeString(time) {
+  const date = new Date(time)
   let dateString = date.toDateString()
   const otherDate = new Date(Date.now())
 
@@ -42,9 +43,9 @@ function EntryView(entry) {
   return `
     <div class="entry" id=${entry.id}>
       <div class="date">
-        ${getDateTimeString(new Date(entry.dateCreated))}
+        ${getDateTimeString(entry.dateCreated)}
         ${entry.dateEdited !== entry.dateCreated
-          ? ` (edited ${getDateTimeString(new Date(entry.dateEdited))})`
+          ? ` (edited ${getDateTimeString(entry.dateEdited)})`
             : ''}
       </div>
       <div class="tags" contenteditable>${entry.tags.join(', ')}</div>
