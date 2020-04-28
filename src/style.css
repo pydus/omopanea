@@ -37,6 +37,10 @@ main {
   overflow: hidden;
 }
 
+.content, .tags {
+  outline: none;
+}
+
 .content {
   white-space: pre-line;
 }
