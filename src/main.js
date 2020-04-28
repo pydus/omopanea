@@ -81,10 +81,10 @@ function postEntry(entry) {
 function getTags() {
   return tagsElement.value === '' ?
     [] : tagsElement.value
-    .toLowerCase()
-    .split(',')
-    .map(tag => tag.trim())
-    .filter(tag => tag.length > 0)
+      .toLowerCase()
+      .split(',')
+      .map(tag => tag.trim())
+      .filter(tag => tag.length > 0)
 }
 
 function addContentElementListeners() {
