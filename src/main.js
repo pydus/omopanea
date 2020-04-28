@@ -166,6 +166,7 @@ function addContentElementListeners() {
       postEntry(entry)
         .then(response => response.json())
         .then(data => entry.id = data.id)
+        .then(() => updateEntries(entries))
 
       contentElement.value = ''
     }
