@@ -11,6 +11,7 @@ async function fetchJSON(url) {
 
 function Entry(tags, content) {
   return {
+    id: null,
     tags,
     content,
     dateCreated: Date.now(),

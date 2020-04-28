@@ -4,7 +4,8 @@ const express = require('express')
 const app = express()
 const port = 3000
 
-const entries = require('./store/entries.json')
+const entriesStore = require('./store/entries.json')
+const entries = entriesStore.data
 
 app.use(express.static('src'))
 
@@ -15,9 +16,15 @@ app.get('/entries', (req, res) => res.json(entries))
 app.use(express.json())
 
 app.post('/entries', (req, res) => {
+  const newEntry = req.body
+
+  newEntry.id = entriesStore.nextId++
+
   entries.push(req.body)
 
-  fs.writeFile('store/entries.json', JSON.stringify(entries), err => {
+  const newEntriesStoreString = JSON.stringify(entriesStore)
+
+  fs.writeFile('store/entries.json', newEntriesStoreString, err => {
     if (err) {
       res.sendStatus(500)
     } else {
