@@ -72,3 +72,42 @@ textarea:focus {
   display: inline;
   color: rgb(34, 156, 238);
 }
+
+.entry {
+  position: relative;
+}
+
+.entry .menu-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: rgb(68, 238, 34);
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.entry .menu-button:not(:hover) ul, .entry .menu-button:hover:before {
+  display: none;
+}
+
+.entry .menu-button:before {
+  content: '...'
+}
+
+.entry .menu-button:hover {
+  z-index: 1;
+}
+
+.entry .menu-button ul {
+  font-size: 19px;
+  background: #121212;
+  color: rgb(238, 167, 34);
+}
+
+.entry .menu-button ul li {
+  padding: 0 4px;
+}
+
+.entry .menu-button ul li:hover {
+  color: rgb(34, 156, 238);
+}

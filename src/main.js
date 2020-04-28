@@ -43,6 +43,7 @@ function EntryView(entry) {
     <div class="entry" id=${entry.id}>
       <div class="date">${getDateTimeString(new Date(entry.dateEdited))}</div>
       <div class="tags" contenteditable>${entry.tags.join(', ')}</div>
+      <div class="menu-button"><ul><li class="remove">Remove</li></ul></div>
       <div class="content" contenteditable>${entry.content}</div>
     </div>
   `
@@ -54,6 +55,16 @@ function findEntry(id) {
       return entry
     }
   }
+}
+
+function findIndex(id) {
+  for (const [ i, entry ] of entries.entries()) {
+    if (entry.id === Number(id)) {
+      return i
+    }
+  }
+
+  return -1
 }
 
 function addEntry(element, entry) {
@@ -94,6 +105,25 @@ function editEntry(entry) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(entry)
+  })
+}
+
+function removeEntry(id) {
+  return fetch('/entries', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ id })
+  }).then(response => {
+    if (response.status === 200) {
+      const i = findIndex(id)
+
+      if (i !== -1) {
+        entries.splice(i, 1)
+        updateEntries(entries)
+      }
+    }
   })
 }
 
@@ -180,10 +210,22 @@ function addEntriesListeners() {
   })
 }
 
+function addMouseListeners() {
+  addEventListener('mouseup', e => {
+    if (e.target.className === 'remove') {
+      const id = e.target.parentNode.parentNode.parentNode.id
+
+      removeEntry(id)
+    }
+  })
+}
+
 function init() {
   addContentElementListeners()
   addTagsElementListeners()
   addEntriesListeners()
+  addMouseListeners()
+
   fetchJSON('/entries').then(updateEntries)
 }
 
