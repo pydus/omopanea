@@ -172,11 +172,9 @@ function addEntriesListeners() {
       const id = e.target.parentNode.id
       const newContent = e.target.innerText
       const entry = findEntry(id)
-  
+
       entry.content = newContent
-  
-      console.log(newContent)
-  
+
       editEntry(entry)
     }
   })
