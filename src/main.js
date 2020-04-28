@@ -39,15 +39,21 @@ function getDateTimeString(time) {
   return `${dateString} ${timeString}`
 }
 
+function DateView(dateCreated, dateEdited) {
+  return `
+    <div class="date">
+      ${getDateTimeString(dateCreated)}
+      ${dateEdited !== dateCreated
+        ? ` (edited ${getDateTimeString(dateEdited)})`
+          : ''}
+    </div>
+  `
+}
+
 function EntryView(entry) {
   return `
-    <div class="entry" id=${entry.id}>
-      <div class="date">
-        ${getDateTimeString(entry.dateCreated)}
-        ${entry.dateEdited !== entry.dateCreated
-          ? ` (edited ${getDateTimeString(entry.dateEdited)})`
-            : ''}
-      </div>
+    <div class="entry" id="${entry.id}">
+      <span id="date-${entry.id}">${DateView(entry.dateCreated, entry.dateEdited)}</span>
       <div class="tags" contenteditable>${entry.tags.join(', ')}</div>
       <div class="menu-button"><ul><li class="remove">Remove</li></ul></div>
       <div class="content" contenteditable>${entry.content}</div>
@@ -212,6 +218,10 @@ function addEntriesListeners() {
       entry.content = newContent
 
       editEntry(entry)
+      
+      const dateElement = document.getElementById(`date-${id}`)
+
+      dateElement.innerHTML = DateView(entry.dateCreated, Date.now())
     }
   })
 }
