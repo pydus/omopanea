@@ -41,7 +41,12 @@ function getDateTimeString(date) {
 function EntryView(entry) {
   return `
     <div class="entry" id=${entry.id}>
-      <div class="date">${getDateTimeString(new Date(entry.dateEdited))}</div>
+      <div class="date">
+        ${getDateTimeString(new Date(entry.dateCreated))}
+        ${entry.dateEdited !== entry.dateCreated
+          ? ` (edited ${getDateTimeString(new Date(entry.dateEdited))})`
+            : ''}
+      </div>
       <div class="tags" contenteditable>${entry.tags.join(', ')}</div>
       <div class="menu-button"><ul><li class="remove">Remove</li></ul></div>
       <div class="content" contenteditable>${entry.content}</div>
