@@ -166,15 +166,19 @@ function addTagsElementListeners() {
 
 function addEntriesListeners() {
   const entriesElement = document.getElementById('entries')
-  
+
   entriesElement.addEventListener('keyup', e => {
-    const id = e.target.parentNode.id
-    const newContent = e.target.innerText
-    const entry = findEntry(id)
-
-    entry.content = newContent
-
-    editEntry(entry)
+    if (e.target.className === 'content') {
+      const id = e.target.parentNode.id
+      const newContent = e.target.innerText
+      const entry = findEntry(id)
+  
+      entry.content = newContent
+  
+      console.log(newContent)
+  
+      editEntry(entry)
+    }
   })
 }
 
