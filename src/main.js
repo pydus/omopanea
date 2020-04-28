@@ -215,13 +215,15 @@ function addEntriesListeners() {
       const newContent = e.target.innerHTML
       const entry = findEntry(id)
 
-      entry.content = newContent
-
-      editEntry(entry)
-      
-      const dateElement = document.getElementById(`date-${id}`)
-
-      dateElement.innerHTML = DateView(entry.dateCreated, Date.now())
+      if (newContent !== entry.content) {
+        entry.content = newContent
+  
+        editEntry(entry)
+        
+        const dateElement = document.getElementById(`date-${id}`)
+  
+        dateElement.innerHTML = DateView(entry.dateCreated, Date.now())
+      }
     }
   })
 }
