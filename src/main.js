@@ -200,7 +200,7 @@ function addEntriesListeners() {
   entriesElement.addEventListener('keyup', e => {
     if (e.target.className === 'content') {
       const id = e.target.parentNode.id
-      const newContent = e.target.innerText
+      const newContent = e.target.innerHTML
       const entry = findEntry(id)
 
       entry.content = newContent
