@@ -76,7 +76,9 @@ app.delete('/entries', (req, res) => {
   const [ i ] = findEntry(req.body.id)
 
   if (i !== null) {
-    entries.splice(i, 1)
+    const removed = entries.splice(i, 1)[0]
+
+    entriesStore.removed.push(removed)
 
     writeEntries().then(err => {
       if (err) {
