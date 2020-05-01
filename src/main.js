@@ -53,9 +53,11 @@ function DateView(dateCreated, dateEdited) {
 function EntryView(entry) {
   return `
     <div class="entry" id="${entry.id}">
-      <span id="date-${entry.id}">${DateView(entry.dateCreated, entry.dateEdited)}</span>
-      <div class="tags" contenteditable>${entry.tags.join(', ')}</div>
-      <div class="menu-button"><ul><li class="remove">Remove</li></ul></div>
+      <div class="title">
+        <span id="date-${entry.id}">${DateView(entry.dateCreated, entry.dateEdited)}</span>
+        <div class="tags" contenteditable>${entry.tags.join(', ')}</div>
+        <div class="menu-button"><ul><li class="remove">Remove</li></ul></div>
+      </div>
       <div class="content" contenteditable>${entry.content}</div>
     </div>
   `
