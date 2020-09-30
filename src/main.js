@@ -234,7 +234,7 @@ function addEntriesListeners() {
 function addMouseListeners() {
   addEventListener('mouseup', e => {
     if (e.target.className === 'remove') {
-      const id = e.target.parentNode.parentNode.parentNode.id
+      const id = e.target.parentNode.parentNode.parentNode.parentNode.id
 
       removeEntry(id)
     }
