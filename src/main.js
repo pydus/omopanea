@@ -115,7 +115,7 @@ function editEntry(entry) {
   })
 }
 
-function removeEntry(tagsElement, entriesElement, id, entries) {
+function removeEntry(id, entries) {
   return fetch('/entries', {
     method: 'DELETE',
     headers: {
@@ -127,8 +127,7 @@ function removeEntry(tagsElement, entriesElement, id, entries) {
       const i = findIndex(id, entries)
 
       if (i !== -1) {
-        entries.splice(i, 1)
-        updateEntries(tagsElement, entriesElement, entries)
+        return entries.splice(i, 1)
       }
     }
   })
@@ -227,7 +226,12 @@ function addMouseListeners(tagsElement, entriesElement, entries, removeClassName
     if (e.target.className === removeClassName) {
       const id = e.target.parentNode.parentNode.parentNode.parentNode.id
 
-      removeEntry(tagsElement, entriesElement, id, entries)
+      removeEntry(id, entries)
+        .then(removed => {
+          if (removed) {
+            updateEntries(tagsElement, entriesElement, entries)
+          }
+        })
     }
   })
 }
