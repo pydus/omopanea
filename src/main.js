@@ -1,9 +1,3 @@
-const tagsElement = document.getElementById('tags')
-const contentElement = document.getElementById('content')
-const entriesElement = document.getElementById('entries')
-
-let entries = []
-
 async function fetchJSON(url) {
   return fetch(url)
     .then(response => response.json())
@@ -63,7 +57,7 @@ function EntryView(entry) {
   `
 }
 
-function findEntry(id) {
+function findEntry(id, entries) {
   for (const entry of entries) {
     if (entry.id === Number(id)) {
       return entry
@@ -71,8 +65,8 @@ function findEntry(id) {
   }
 }
 
-function findIndex(id) {
-  for (const [ i, entry ] of entries.entries()) {
+function findIndex(id, array) {
+  for (const [ i, entry ] of array.entries()) {
     if (entry.id === Number(id)) {
       return i
     }
@@ -91,15 +85,14 @@ function addEntries(element, entries) {
   }
 }
 
-function displayEntries(entries) {
+function displayEntries(entriesElement, entries) {
   entriesElement.innerHTML = ''
   addEntries(entriesElement, entries)
 }
 
-function updateEntries(newEntries) {
-  entries = newEntries
+function updateEntries(tagsElement, entriesElement, newEntries) {
   entriesElement.innerHTML = ''
-  displayFilteredEntries(entries)
+  displayFilteredEntries(tagsElement, entriesElement, newEntries)
 }
 
 function postEntry(entry) {
@@ -122,7 +115,7 @@ function editEntry(entry) {
   })
 }
 
-function removeEntry(id) {
+function removeEntry(tagsElement, entriesElement, id, entries) {
   return fetch('/entries', {
     method: 'DELETE',
     headers: {
@@ -131,17 +124,17 @@ function removeEntry(id) {
     body: JSON.stringify({ id })
   }).then(response => {
     if (response.status === 200) {
-      const i = findIndex(id)
+      const i = findIndex(id, entries)
 
       if (i !== -1) {
         entries.splice(i, 1)
-        updateEntries(entries)
+        updateEntries(tagsElement, entriesElement, entries)
       }
     }
   })
 }
 
-function getTags() {
+function getTags(tagsElement) {
   return tagsElement.value === '' ?
     [] : tagsElement.value
       .toLowerCase()
@@ -150,14 +143,14 @@ function getTags() {
       .filter(tag => tag.length > 0)
 }
 
-function addContentElementListeners() {
+function addContentElementListeners(tagsElement, contentElement, entriesElement, entries) {
   let controlIsDown = false
 
   contentElement.addEventListener('keydown', e => {
     if (e.key === 'Control') {
       controlIsDown = true
     } else if (e.key === 'Enter' && controlIsDown) {
-      const tags = getTags()
+      const tags = getTags(tagsElement)
       const content = contentElement.value
       const entry = Entry(tags, content)
 
@@ -168,7 +161,7 @@ function addContentElementListeners() {
       postEntry(entry)
         .then(response => response.json())
         .then(data => entry.id = data.id)
-        .then(() => updateEntries(entries))
+        .then(() => updateEntries(tagsElement, entriesElement, entries))
 
       contentElement.value = ''
     }
@@ -197,26 +190,24 @@ function tagFilter(tags, entries) {
   })
 }
 
-function displayFilteredEntries(entries) {
-  const tags = getTags()
+function displayFilteredEntries(tagsElement, entriesElement, entries) {
+  const tags = getTags(tagsElement)
   const filteredEntries = tagFilter(tags, entries)
-  displayEntries(filteredEntries)
+  displayEntries(entriesElement, filteredEntries)
 }
 
-function addTagsElementListeners() {
+function addTagsElementListeners(tagsElement, entriesElement, entries) {
   tagsElement.addEventListener('keyup', () => {
-    displayFilteredEntries(entries)
+    displayFilteredEntries(tagsElement, entriesElement, entries)
   })
 }
 
-function addEntriesListeners() {
-  const entriesElement = document.getElementById('entries')
-
+function addEntriesListeners(entriesElement, entries) {
   entriesElement.addEventListener('keyup', e => {
     if (e.target.className === 'content') {
       const id = e.target.parentNode.id
       const newContent = e.target.innerHTML
-      const entry = findEntry(id)
+      const entry = findEntry(id, entries)
 
       if (newContent !== entry.content) {
         entry.content = newContent
@@ -231,23 +222,29 @@ function addEntriesListeners() {
   })
 }
 
-function addMouseListeners() {
+function addMouseListeners(tagsElement, entriesElement, entries, removeClassName) {
   addEventListener('mouseup', e => {
-    if (e.target.className === 'remove') {
+    if (e.target.className === removeClassName) {
       const id = e.target.parentNode.parentNode.parentNode.parentNode.id
 
-      removeEntry(id)
+      removeEntry(tagsElement, entriesElement, id, entries)
     }
   })
 }
 
-function init() {
-  addContentElementListeners()
-  addTagsElementListeners()
-  addEntriesListeners()
-  addMouseListeners()
-
-  fetchJSON('/entries').then(updateEntries)
+function start(tagsElement, contentElement, entriesElement) {
+  fetchJSON('/entries')
+    .then(entries => {
+      updateEntries(tagsElement, entriesElement, entries)
+      addContentElementListeners(tagsElement, contentElement, entriesElement, entries)
+      addTagsElementListeners(tagsElement, entriesElement, entries)
+      addEntriesListeners(entriesElement, entries)
+      addMouseListeners(tagsElement, entriesElement, entries, 'remove')
+    })
 }
 
-init()
+start(
+  document.getElementById('tags'),
+  document.getElementById('content'),
+  document.getElementById('entries')
+)
