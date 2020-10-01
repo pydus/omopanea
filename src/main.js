@@ -215,6 +215,11 @@ function addTagsElementListeners(tagsElement, entriesElement, entries) {
   return () => tagsElement.removeEventListener('keyup', onKeyUp)
 }
 
+function updateEntryDateEdited(entry, dateEdited) {
+  const dateElement = document.getElementById(`date-${entry.id}`)
+  dateElement.innerHTML = DateView(entry.dateCreated, dateEdited)
+}
+
 function addEntriesListeners(entriesElement, entries) {
   function onKeyUp(e) {
     if (e.target.className === 'content') {
@@ -227,9 +232,9 @@ function addEntriesListeners(entriesElement, entries) {
 
         editEntry(entry)
 
-        const dateElement = document.getElementById(`date-${id}`)
+        const dateEdited = Date.now()
 
-        dateElement.innerHTML = DateView(entry.dateCreated, Date.now())
+        updateEntryDateEdited(entry, dateEdited)
       }
     }
   }
