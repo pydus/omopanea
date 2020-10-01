@@ -1,9 +1,8 @@
 const fs = require('fs')
 const entriesStore = require('./entries.json')
-const entries = entriesStore.data
 
-function writeEntries() {
-  const newEntriesStoreString = JSON.stringify(entriesStore)
+function writeEntries(store = entriesStore) {
+  const newEntriesStoreString = JSON.stringify(store)
 
   return new Promise(resolve =>
     fs.writeFile('store/entries.json', newEntriesStoreString, err =>
@@ -11,7 +10,7 @@ function writeEntries() {
     ))
 }
 
-function findEntry(id) {
+function findEntry(id, entries = entriesStore.data) {
   for (const [ i, entry ] of entries.entries()) {
     if (entries[i].id === Number(id)) {
       return [ i, entry ]
@@ -24,15 +23,17 @@ function findEntry(id) {
 exports.findEntry = findEntry
 
 exports.getEntries = function() {
-  return entries
+  return entriesStore.data
 }
 
-exports.addEntry = function(newEntry) {
-  newEntry.id = entriesStore.nextId++
+exports.addEntry = function(newEntry, store = entriesStore) {
+  const entries = store.data
+
+  newEntry.id = store.nextId++
 
   entries.push(newEntry)
 
-  return writeEntries()
+  return writeEntries(store)
     .then(err => {
       if (err) {
         throw 500
@@ -42,15 +43,16 @@ exports.addEntry = function(newEntry) {
     })
 }
 
-exports.editEntry = function(entry) {
-  const [ i ] = findEntry(entry.id)
+exports.editEntry = function(entry, store = entriesStore) {
+  const entries = store.data
+  const [ i ] = findEntry(entry.id, entries)
 
   if (i !== null) {
     entry.dateEdited = Date.now()
 
     entries[i] = entry
 
-    return writeEntries()
+    return writeEntries(store)
       .then(err => {
         if (err) {
           throw 500
@@ -64,15 +66,16 @@ exports.editEntry = function(entry) {
   }
 }
 
-exports.deleteEntry = function(id) {
-  const [ i ] = findEntry(id)
+exports.deleteEntry = function(id, store = entriesStore) {
+  const entries = store.data
+  const [ i ] = findEntry(id, entries)
 
   if (i !== null) {
     const removed = entries.splice(i, 1)[0]
 
-    entriesStore.removed.push(removed)
+    store.removed.push(removed)
 
-    return writeEntries()
+    return writeEntries(store)
       .then(err => {
         if (err) {
           throw 500
