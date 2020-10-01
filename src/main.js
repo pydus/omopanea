@@ -264,33 +264,29 @@ function addMouseListeners(entries, removeClassName, callback) {
 
 function start(tagsElement, contentElement, entriesElement) {
   fetchJSON('/entries')
-    .then(entries => {
-      function load(entries) {
-        updateEntries(tagsElement, entriesElement, entries)
+    .then(function load(entries) {
+      updateEntries(tagsElement, entriesElement, entries)
 
-        const removeContentElementListeners =
-          addContentElementListeners(tagsElement, contentElement, entries, reload)
+      const removeContentElementListeners =
+        addContentElementListeners(tagsElement, contentElement, entries, reload)
 
-        const removeTagsElementListeners =
-          addTagsElementListeners(tagsElement, entriesElement, entries)
+      const removeTagsElementListeners =
+        addTagsElementListeners(tagsElement, entriesElement, entries)
 
-        const removeEntriesListeners = addEntriesListeners(entriesElement, entries)
-        const removeMouseListeners = addMouseListeners(entries, 'remove', reload)
+      const removeEntriesListeners = addEntriesListeners(entriesElement, entries)
+      const removeMouseListeners = addMouseListeners(entries, 'remove', reload)
 
-        function unload() {
-          removeContentElementListeners()
-          removeTagsElementListeners()
-          removeEntriesListeners()
-          removeMouseListeners()
-        }
-
-        function reload(entries) {
-          unload()
-          load(entries)
-        }
+      function unload() {
+        removeContentElementListeners()
+        removeTagsElementListeners()
+        removeEntriesListeners()
+        removeMouseListeners()
       }
 
-      load(entries)
+      function reload(entries) {
+        unload()
+        load(entries)
+      }
     })
 }
 
