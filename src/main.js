@@ -115,27 +115,27 @@ function editEntry(entry) {
   })
 }
 
-function removeEntry(id, entries) {
+function removeEntry(id) {
   return fetch('/entries', {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({ id })
-  }).then(response => {
-    if (response.status === 200) {
-      const i = findIndex(id, entries)
-
-      if (i !== -1) {
-        const newEntries = [
-          ...entries.slice(0, i),
-          ...entries.slice(i + 1)
-        ]
-
-        return newEntries
-      }
-    }
   })
+}
+
+function removeEntryLocally(id, entries) {
+  const i = findIndex(id, entries)
+
+  if (i !== -1) {
+    const newEntries = [
+      ...entries.slice(0, i),
+      ...entries.slice(i + 1)
+    ]
+
+    return newEntries
+  }
 }
 
 function getTags(tagsElement) {
@@ -244,10 +244,14 @@ function addMouseListeners(entries, removeClassName, callback) {
     if (e.target.className === removeClassName) {
       const id = e.target.parentNode.parentNode.parentNode.parentNode.id
 
-      removeEntry(id, entries)
-        .then(newEntries => {
-          if (newEntries) {
-            callback(newEntries)
+      removeEntry(id)
+        .then(response => {
+          if (response.status === 200) {
+            const newEntries = removeEntryLocally(id, entries)
+
+            if (newEntries) {
+              callback(newEntries)
+            }
           }
         })
     }
