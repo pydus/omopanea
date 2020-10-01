@@ -75,19 +75,19 @@ function findIndex(id, array) {
   return -1
 }
 
-function addEntry(element, entry) {
+function addEntryToElement(element, entry) {
   element.innerHTML = EntryView(entry) + element.innerHTML
 }
 
-function addEntries(element, entries) {
+function addEntriesToElement(element, entries) {
   for (const entry of entries) {
-    addEntry(element, entry)
+    addEntryToElement(element, entry)
   }
 }
 
 function displayEntries(entriesElement, entries) {
   entriesElement.innerHTML = ''
-  addEntries(entriesElement, entries)
+  addEntriesToElement(entriesElement, entries)
 }
 
 function updateEntries(tagsElement, entriesElement, newEntries) {
@@ -156,7 +156,7 @@ function addContentElementListeners(tagsElement, contentElement, entriesElement,
 
       entries.push(entry)
 
-      addEntry(entriesElement, entry)
+      addEntryToElement(entriesElement, entry)
 
       postEntry(entry)
         .then(response => response.json())
