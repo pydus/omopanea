@@ -127,7 +127,12 @@ function removeEntry(id, entries) {
       const i = findIndex(id, entries)
 
       if (i !== -1) {
-        return entries.splice(i, 1)
+        const newEntries = [
+          ...entries.slice(0, i),
+          ...entries.slice(i + 1)
+        ]
+
+        return newEntries
       }
     }
   })
@@ -142,35 +147,40 @@ function getTags(tagsElement) {
       .filter(tag => tag.length > 0)
 }
 
-function addContentElementListeners(tagsElement, contentElement, entriesElement, entries) {
+function addContentElementListeners(tagsElement, contentElement, entries, callback) {
   let controlIsDown = false
 
-  contentElement.addEventListener('keydown', e => {
+  function onKeyDown(e) {
     if (e.key === 'Control') {
       controlIsDown = true
     } else if (e.key === 'Enter' && controlIsDown) {
       const tags = getTags(tagsElement)
       const content = contentElement.value
       const entry = Entry(tags, content)
-
-      entries.push(entry)
-
-      addEntryToElement(entriesElement, entry)
+      const newEntries = [ ...entries, entry ]
 
       postEntry(entry)
         .then(response => response.json())
         .then(data => entry.id = data.id)
-        .then(() => updateEntries(tagsElement, entriesElement, entries))
+        .then(() => callback(newEntries))
 
       contentElement.value = ''
     }
-  })
+  }
 
-  contentElement.addEventListener('keyup', e => {
+  function onKeyUp(e) {
     if (e.key === 'Control') {
       controlIsDown = false
     }
-  })
+  }
+
+  contentElement.addEventListener('keydown', onKeyDown)
+  contentElement.addEventListener('keyup', onKeyUp)
+
+  return () => {
+    contentElement.removeEventListener('keydown', onKeyDown)
+    contentElement.removeEventListener('keyup', onKeyUp)
+  }
 }
 
 function tagFilter(tags, entries) {
@@ -196,13 +206,17 @@ function displayFilteredEntries(tagsElement, entriesElement, entries) {
 }
 
 function addTagsElementListeners(tagsElement, entriesElement, entries) {
-  tagsElement.addEventListener('keyup', () => {
+  function onKeyUp(e) {
     displayFilteredEntries(tagsElement, entriesElement, entries)
-  })
+  }
+
+  tagsElement.addEventListener('keyup', onKeyUp)
+
+  return () => tagsElement.removeEventListener('keyup', onKeyUp)
 }
 
 function addEntriesListeners(entriesElement, entries) {
-  entriesElement.addEventListener('keyup', e => {
+  function onKeyUp(e) {
     if (e.target.className === 'content') {
       const id = e.target.parentNode.id
       const newContent = e.target.innerHTML
@@ -210,40 +224,69 @@ function addEntriesListeners(entriesElement, entries) {
 
       if (newContent !== entry.content) {
         entry.content = newContent
-  
+
         editEntry(entry)
-        
+
         const dateElement = document.getElementById(`date-${id}`)
-  
+
         dateElement.innerHTML = DateView(entry.dateCreated, Date.now())
       }
     }
-  })
+  }
+
+  entriesElement.addEventListener('keyup', onKeyUp)
+
+  return () => entriesElement.removeEventListener('keyup', onKeyUp)
 }
 
-function addMouseListeners(tagsElement, entriesElement, entries, removeClassName) {
-  addEventListener('mouseup', e => {
+function addMouseListeners(entries, removeClassName, callback) {
+  function onMouse(e) {
     if (e.target.className === removeClassName) {
       const id = e.target.parentNode.parentNode.parentNode.parentNode.id
 
       removeEntry(id, entries)
-        .then(removed => {
-          if (removed) {
-            updateEntries(tagsElement, entriesElement, entries)
+        .then(newEntries => {
+          if (newEntries) {
+            callback(newEntries)
           }
         })
     }
-  })
+  }
+
+  addEventListener('mouseup', onMouse)
+
+  return () => removeEventListener('mouseup', onMouse)
 }
 
 function start(tagsElement, contentElement, entriesElement) {
   fetchJSON('/entries')
     .then(entries => {
-      updateEntries(tagsElement, entriesElement, entries)
-      addContentElementListeners(tagsElement, contentElement, entriesElement, entries)
-      addTagsElementListeners(tagsElement, entriesElement, entries)
-      addEntriesListeners(entriesElement, entries)
-      addMouseListeners(tagsElement, entriesElement, entries, 'remove')
+      function load(entries) {
+        updateEntries(tagsElement, entriesElement, entries)
+
+        const removeContentElementListeners =
+          addContentElementListeners(tagsElement, contentElement, entries, reload)
+
+        const removeTagsElementListeners =
+          addTagsElementListeners(tagsElement, entriesElement, entries)
+
+        const removeEntriesListeners = addEntriesListeners(entriesElement, entries)
+        const removeMouseListeners = addMouseListeners(entries, 'remove', reload)
+
+        function unload() {
+          removeContentElementListeners()
+          removeTagsElementListeners()
+          removeEntriesListeners()
+          removeMouseListeners()
+        }
+
+        function reload(entries) {
+          unload()
+          load(entries)
+        }
+      }
+
+      load(entries)
     })
 }
 
