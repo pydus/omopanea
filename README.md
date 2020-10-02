@@ -12,4 +12,4 @@ localhost:3000
 * Optionally enter tags
 * Ctrl+Enter to post
 * Filter posts by tags in tag field
-* Click post text to edit
+* Edit post by clicking its content
