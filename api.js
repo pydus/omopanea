@@ -17,7 +17,11 @@ module.exports = function(app) {
         .then(id => res.json({ id }))
   
     } catch (err) {
-      res.sendStatus(err)
+      if (typeof err === 'number') {
+        res.sendStatus(err)
+      } else {
+        res.sendStatus(500)
+      }
     }
   })
   
@@ -29,7 +33,11 @@ module.exports = function(app) {
         .then(() => res.sendStatus(200))
   
     } catch (err) {
-      res.sendStatus(err)
+      if (typeof err === 'number') {
+        res.sendStatus(err)
+      } else {
+        res.sendStatus(500)
+      }
     }
   })
   
@@ -40,7 +48,11 @@ module.exports = function(app) {
         .then(() => res.sendStatus(200))
   
     } catch (err) {
-      res.sendStatus(err)
+      if (typeof err === 'number') {
+        res.sendStatus(err)
+      } else {
+        res.sendStatus(500)
+      }
     }
   })
 }
