@@ -30,18 +30,21 @@ module.exports = function(app) {
     })
   })
 
-  app.put('/entries', (req, res) => {
+  app.put('/entries/:id', (req, res) => {
     tryAndSendStatusOnFail(res, () => {
+      const id = req.params.id
       const entry = req.body
+
+      entry.id = id
 
       editEntry(entry)
         .then(() => res.sendStatus(200))
     })
   })
 
-  app.delete('/entries', (req, res) => {
+  app.delete('/entries/:id', (req, res) => {
     tryAndSendStatusOnFail(res, () => {
-      deleteEntry(req.body.id)
+      deleteEntry(req.params.id)
         .then(() => res.sendStatus(200))
     })
   })

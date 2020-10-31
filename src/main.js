@@ -106,7 +106,7 @@ function postEntry(entry) {
 }
 
 function editEntry(entry) {
-  return fetch('/entries', {
+  return fetch(`/entries/${entry.id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
@@ -116,12 +116,11 @@ function editEntry(entry) {
 }
 
 function removeEntry(id) {
-  return fetch('/entries', {
+  return fetch(`/entries/${id}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ id })
+    }
   })
 }
 
