@@ -1,13 +1,14 @@
 const fs = require('fs')
+const { matchesModel, copyUneditable } = require('./util')
 const entriesStore = require('./entries.json')
+const entryModel = require('./entry.json')
 
 function writeEntries(store = entriesStore) {
   const newEntriesStoreString = JSON.stringify(store)
 
   return new Promise(resolve =>
-    fs.writeFile('store/entries.json', newEntriesStoreString, err =>
-      resolve(err)
-    ))
+    fs.writeFile('store/entries.json',
+      newEntriesStoreString, err => resolve(err)))
 }
 
 function findEntry(id, entries = entriesStore.data) {
@@ -28,29 +29,43 @@ exports.getEntries = function() {
 
 exports.addEntry = function(newEntry, store = entriesStore) {
   const entries = store.data
+  const entryIsValid = matchesModel(entryModel, newEntry)
 
-  newEntry.id = store.nextId++
+  if (entryIsValid) {
+    const now = Date.now()
 
-  entries.push(newEntry)
+    newEntry.id = store.nextId++
 
-  return writeEntries(store)
-    .then(err => {
-      if (err) {
-        throw 500
-      } else {
-        return newEntry.id
-      }
-    })
+    newEntry.dateCreated = now
+    newEntry.dateEdited = now
+
+    entries.push(newEntry)
+
+    return writeEntries(store)
+      .then(err => {
+        if (err) {
+          throw 500
+        } else {
+          return newEntry.id
+        }
+      })
+
+  } else {
+    throw 400
+  }
 }
 
 exports.editEntry = function(entry, store = entriesStore) {
   const entries = store.data
-  const [ i ] = findEntry(entry.id, entries)
+  const [ i, storedEntry ] = findEntry(entry.id, entries)
+  const entryIsValid = matchesModel(entryModel, entry)
 
-  if (i !== null) {
-    entry.dateEdited = Date.now()
+  if (i !== null && entryIsValid) {
+    const newEntry = copyUneditable(entryModel, storedEntry, entry)
 
-    entries[i] = entry
+    newEntry.dateEdited = Date.now()
+
+    entries[i] = newEntry
 
     return writeEntries(store)
       .then(err => {
