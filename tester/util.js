@@ -1,5 +1,5 @@
 /**
- * Checks for equality between two variables with any type.
+ * Checks for equality between two variables of any type.
  * @param {*} x 
  * @param {*} y 
  */
