@@ -137,9 +137,9 @@ function removeEntryLocally(id, entries) {
   }
 }
 
-function getTags(tagsElement) {
-  return tagsElement.value === '' ?
-    [] : tagsElement.value
+function getTags(tagsString) {
+  return tagsString === '' ?
+    [] : tagsString
       .toLowerCase()
       .split(',')
       .map(tag => tag.trim())
@@ -153,7 +153,7 @@ function addContentElementListeners(tagsElement, contentElement, entries, callba
     if (e.key === 'Control') {
       controlIsDown = true
     } else if (e.key === 'Enter' && controlIsDown) {
-      const tags = getTags(tagsElement)
+      const tags = getTags(tagsElement.value)
       const content = contentElement.value
       const entry = Entry(tags, content)
       const newEntries = [ ...entries, entry ]
@@ -199,7 +199,7 @@ function tagFilter(tags, entries) {
 }
 
 function displayFilteredEntries(tagsElement, entriesElement, entries) {
-  const tags = getTags(tagsElement)
+  const tags = getTags(tagsElement.value)
   const filteredEntries = tagFilter(tags, entries)
   displayEntries(entriesElement, filteredEntries)
 }
