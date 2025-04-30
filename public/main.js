@@ -57,6 +57,13 @@ function EntryView(entry) {
   `
 }
 
+function EntriesView(entries) {
+  return `
+    <div id="entries-count">${entries.length} entr${entries.length === 1 ? 'y' : 'ies'}</div>
+    <div id="entries-elements">${entries.map(entry => EntryView(entry)).reverse().join('')}</div>
+  `
+}
+
 function findEntry(id, entries) {
   for (const entry of entries) {
     if (entry.id === Number(id)) {
@@ -75,19 +82,8 @@ function findIndex(id, array) {
   return -1
 }
 
-function addEntryToElement(element, entry) {
-  element.innerHTML = EntryView(entry) + element.innerHTML
-}
-
-function addEntriesToElement(element, entries) {
-  for (const entry of entries) {
-    addEntryToElement(element, entry)
-  }
-}
-
 function displayEntries(entriesElement, entries) {
-  entriesElement.innerHTML = ''
-  addEntriesToElement(entriesElement, entries)
+  entriesElement.innerHTML = EntriesView(entries)
 }
 
 function updateEntries(tagsElement, entriesElement, newEntries) {

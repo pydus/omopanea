@@ -77,6 +77,10 @@ textarea:focus {
   color: rgb(34, 156, 238);
 }
 
+#entries-count {
+  margin-top: 10px;
+}
+
 .entry {
   position: relative;
 }
