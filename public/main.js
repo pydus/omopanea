@@ -219,6 +219,20 @@ function updateEntryDateEdited(entry, dateEdited) {
   dateElement.innerHTML = DateView(entry.dateCreated, dateEdited)
 }
 
+function arraysAreEqual(a, b) {
+  if (a.length !== b.length) {
+    return false
+  }
+
+  for (const [ i, element ] of a.entries()) {
+    if (element !== b[i]) {
+      return false
+    }
+  }
+
+  return true
+}
+
 function addEntriesListeners(entriesElement, entries) {
   function onKeyUp(e) {
     if (e.target.className === 'content') {
@@ -228,6 +242,21 @@ function addEntriesListeners(entriesElement, entries) {
 
       if (newContent !== entry.content) {
         entry.content = newContent
+
+        editEntry(entry)
+
+        const dateEdited = Date.now()
+
+        updateEntryDateEdited(entry, dateEdited)
+      }
+    } else if (e.target.className === 'tags') {
+      const id = e.target.parentNode.parentNode.id
+      const tagsString = e.target.innerText
+      const newTags = getTags(tagsString)
+      const entry = findEntry(id, entries)
+
+      if (newTags.length > 0 && !arraysAreEqual(entry.tags, newTags)) {
+        entry.tags = newTags
 
         editEntry(entry)
 
