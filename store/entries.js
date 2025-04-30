@@ -1,13 +1,48 @@
 const fs = require('fs')
 const { matchesModel, copyUneditable } = require('./util')
-const entriesStore = require('./entries.json')
 const entryModel = require('./entry.json')
+const path = require('path')
+const storeModelPath = path.join(__dirname, 'entries.json')
+const storeDir = path.join(__dirname, '../data')
+const storePath = `${storeDir}/entries.json`
+
+let entriesStore
+
+try {
+  if (fs.existsSync(storePath)) {
+    entriesStore = require(storePath)
+  } else {
+    function createStore() {
+      fs.copyFile(storeModelPath, storePath, error => {
+        if (error) {
+          throw error
+        } else {
+          entriesStore = require(storePath)
+        }
+      })
+    }
+
+    if (fs.existsSync(storeDir)) {
+      createStore()
+    } else {
+      fs.mkdir(storeDir, error => {
+        if (error) {
+          throw error
+        } else {
+          createStore()
+        }
+      })
+    }
+  }
+} catch (error) {
+  console.error(error)
+}
 
 function writeEntries(store = entriesStore) {
   const newEntriesStoreString = JSON.stringify(store)
 
   return new Promise(resolve =>
-    fs.writeFile('store/entries.json',
+    fs.writeFile(storePath,
       newEntriesStoreString, err => resolve(err)))
 }
 
