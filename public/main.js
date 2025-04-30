@@ -38,7 +38,7 @@ function DateView(dateCreated, dateEdited) {
     <div class="date">
       ${getDateTimeString(dateCreated)}
       ${dateEdited !== dateCreated
-        ? ` (edited ${getDateTimeString(dateEdited)})`
+        ? `<span title="Edited ${getDateTimeString(dateEdited)}">*</span>`
           : ''}
     </div>
   `
