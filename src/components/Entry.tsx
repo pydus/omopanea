@@ -82,7 +82,7 @@ export default function Entry({
         onBlur={reportChanges}
         dangerouslySetInnerHTML={{ __html: content }}
         suppressContentEditableWarning={true}
-        contentEditable>
+        contentEditable={true}>
       </div>
     </div>
   )

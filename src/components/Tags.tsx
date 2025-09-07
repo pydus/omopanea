@@ -32,7 +32,7 @@ export default function Tags({
       onKeyUp={editTags}
       onBlur={onBlur}
       suppressContentEditableWarning={true}
-      contentEditable>
+      contentEditable={true}>
         {tags.join(', ')}
     </div>
   )
