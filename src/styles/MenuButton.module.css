@@ -12,7 +12,7 @@
 }
 
 .menuButton:before {
-  content: '...'
+  content: '...';
 }
 
 .menuButton:hover {
