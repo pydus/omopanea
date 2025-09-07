@@ -1,0 +1,21 @@
+.entry {
+  position: relative;
+}
+
+.entry .title {
+  line-height: 2.5;
+}
+
+.entry .content {
+  outline: none;
+  white-space: pre-wrap;
+}
+
+.entry .content:focus {
+  border-left: rgb(34, 156, 238) solid 3px;
+}
+
+.entry .content, .entry .title {
+  border-left: transparent solid 3px;
+  padding: 0 4px;
+}

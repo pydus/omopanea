@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "noEmit": true,
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "target": "es6",
+    "lib": ["es6", "es7", "esnext", "dom"],
+    "module": "esnext",
+    "moduleResolution": "node10",
+    "rewriteRelativeImportExtensions": true
+  },
+  "include": ["./src/**/*"]
+}

@@ -7,3 +7,4 @@ npm-debug.log*
 todo.txt
 
 data/
+dist/bundle.*

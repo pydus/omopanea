@@ -1,9 +1,10 @@
 # omopanea
 
-Local filterable json-stored notepad with few dependencies.
+Local filterable json-stored notepad.
 
 ```
 $ npm install
+$ npm run build
 $ npm run start
 ```
 

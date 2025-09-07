@@ -1,0 +1,34 @@
+.menuButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: rgb(68, 238, 34);
+  cursor: pointer;
+  font-size: .8em;
+}
+
+.menuButton:not(:hover) ul, .menuButton:hover:before {
+  display: none;
+}
+
+.menuButton:before {
+  content: '...'
+}
+
+.menuButton:hover {
+  z-index: 1;
+}
+
+.menuButton ul {
+  font-size: 19px;
+  background: #121212;
+  color: rgb(238, 167, 34);
+}
+
+.menuButton ul li {
+  padding: 0 4px;
+}
+
+.menuButton ul li:hover {
+  color: rgb(34, 156, 238);
+}
