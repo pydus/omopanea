@@ -19,9 +19,16 @@ export default function Tags({
     }
   }
 
+  function onKeyDown(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault()
+    }
+  }
+
   return (
     <div
       className={styles.tags}
+      onKeyDown={onKeyDown}
       onKeyUp={editTags}
       onBlur={onBlur}
       suppressContentEditableWarning={true}
