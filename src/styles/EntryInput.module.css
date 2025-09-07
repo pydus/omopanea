@@ -9,13 +9,13 @@
   padding: 4px;
   min-width: 100%;
   max-width: 100%;
-  border-left: rgb(34, 156, 238) solid 3px;
+  border-left: var(--secondary-color) solid 3px;
   overflow: hidden;
   outline: none;
 }
 
 .entryInput input {
-  border-color: rgb(238, 167, 34);
+  border-color: var(--primary-color);
 }
 
 .entryInput textarea:not(:focus) {

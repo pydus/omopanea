@@ -1,4 +1,4 @@
 .date {
   display: inline;
-  color: rgb(238, 167, 34);
+  color: var(--primary-color);
 }

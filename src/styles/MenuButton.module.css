@@ -2,7 +2,7 @@
   position: absolute;
   top: 0;
   right: 0;
-  color: rgb(68, 238, 34);
+  color: var(--tertiary-color);
   cursor: pointer;
   font-size: .8em;
 }
@@ -22,7 +22,7 @@
 .menuButton ul {
   font-size: 19px;
   background: #121212;
-  color: rgb(238, 167, 34);
+  color: var(--primary-color);
 }
 
 .menuButton ul li {
@@ -30,5 +30,5 @@
 }
 
 .menuButton ul li:hover {
-  color: rgb(34, 156, 238);
+  color: var(--secondary-color);
 }
