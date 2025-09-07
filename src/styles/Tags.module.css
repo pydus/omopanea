@@ -1,5 +1,11 @@
 .tags {
   outline: none;
   display: inline;
+  white-space: pre-wrap;
   color: rgb(34, 156, 238);
+}
+
+.filterTags {
+  display: inline;
+  color: rgb(238, 167, 34);
 }

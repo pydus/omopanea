@@ -4,15 +4,22 @@ import * as styles from '../styles/Entries.module.css'
 
 export default function Entries({
   entries,
+  filterTags,
   onEdit,
   onRemove
 }: {
   entries: EntryType[],
+  filterTags: string[],
   onEdit: (entry: EntryType) => void,
   onRemove: (id: number) => void
 }) {
   const entriesElements = entries.map(entry =>
-    <Entry {...entry} key={entry.id} onEdit={onEdit} onRemove={onRemove} />)
+    <Entry
+      {...entry}
+      key={entry.id}
+      filterTags={filterTags}
+      onEdit={onEdit}
+      onRemove={onRemove} />)
 
   return (
     <>

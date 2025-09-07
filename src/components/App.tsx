@@ -47,6 +47,7 @@ export default function App() {
       <EntryInput onNewEntry={addEntry} onNewTags={setTags} />
       <Entries
         entries={filterEntries(entries, tags)}
+        filterTags={tags}
         onEdit={editEntry}
         onRemove={removeEntry} />
     </>

@@ -12,6 +12,7 @@ export default function Entry({
   content,
   dateCreated,
   dateEdited,
+  filterTags,
   onEdit,
   onRemove
 }: {
@@ -20,6 +21,7 @@ export default function Entry({
   content: string,
   dateCreated: number,
   dateEdited: number,
+  filterTags: string[],
   onEdit: (entry: EntryType) => void,
   onRemove: (id: number) => void
 }) {
@@ -72,8 +74,13 @@ export default function Entry({
   return (
     <div className={styles.entry}>
       <div className={styles.title}>
-        <DateView dateCreated={dateCreated} dateEdited={dateEdited} />
-        <Tags tags={tags} onChange={editTags} onBlur={reportChanges} />
+        {filterTags.length === 0
+          && <DateView dateCreated={dateCreated} dateEdited={dateEdited} />}
+        <Tags
+          tags={tags}
+          filterTags={filterTags}
+          onChange={editTags}
+          onBlur={reportChanges} />
         <MenuButton name="Remove" onClick={remove} />
       </div>
       <div
