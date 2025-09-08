@@ -7,32 +7,39 @@ export default function DateView({
   dateCreated: number,
   dateEdited: number
 }) {
-  function getDateTimeString(time: number) {
-    const date = new Date(time)
-    let dateString = date.toDateString()
-    const otherDate = new Date(Date.now())
+  function getString(timestamp: number) {
+    const date = new Date(timestamp)
+    const ms = Date.now() - date.getTime()
+    const seconds = Math.round(ms / 1000)
+    const minutes = Math.round(seconds / 60)
+    const hours = Math.round(minutes / 60)
+    const days = Math.round(hours / 24)
+    const months = Math.round(days / (365 / 12))
+    const years = Math.round(months / 12)
 
-    if (dateString === otherDate.toDateString()) {
-      dateString = 'Today'
+    if (seconds === 0) {
+      return 'now'
+    } else if (seconds < 60) {
+      return `${seconds} second${seconds > 1 ? 's' : ''} ago`
+    } else if (minutes < 60) {
+      return `${minutes} minute${minutes > 1 ? 's' : ''} ago`
+    } else if (hours < 24) {
+      return `${hours} hour${hours > 1 ? 's' : ''} ago`
+    } else if (days < (365 / 12)) {
+      return `${days} day${days > 1 ? 's' : ''} ago`
+    } else if (months < 12) {
+      return `${months} month${months > 1 ? 's' : ''} ago`
+    } else {
+      return `${years} year${years > 1 ? 's' : ''} ago`
     }
-
-    otherDate.setDate(otherDate.getDate() - 1)
-
-    if (dateString === otherDate.toDateString()) {
-      dateString = 'Yesterday'
-    }
-
-    const timeString = date.toTimeString().slice(0, 5)
-
-    return `${dateString} ${timeString}`
   }
 
   return (
     <div className={styles.date}>
-      {getDateTimeString(dateCreated)}
+      {getString(dateCreated)}
       {dateEdited !== dateCreated
-        ? <span title={`Edited ${getDateTimeString(dateEdited)}`}> * </span>
-        : ' '}
+        ? <span title={`Edited ${getString(dateEdited)}`}> * </span>
+          : ' '}
     </div>
   )
 }
