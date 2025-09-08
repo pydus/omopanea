@@ -55,7 +55,8 @@ export default function EntryInput({
       <input
         type="text"
         placeholder="tag1, tag2, ..."
-        onChange={updateTags} />
+        onChange={updateTags}
+        autoFocus={true} />
       <textarea
         placeholder="content (ctrl+enter to post)"
         onKeyDown={onKeyDown}
