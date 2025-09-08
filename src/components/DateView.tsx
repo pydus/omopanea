@@ -34,8 +34,13 @@ export default function DateView({
     }
   }
 
+  function getLocaleString(timestamp: number) {
+    const date = new Date(timestamp)
+    return date.toLocaleString()
+  }
+
   return (
-    <div className={styles.date}>
+    <div className={styles.date} title={getLocaleString(dateCreated)}>
       {getString(dateCreated)}
       {dateEdited !== dateCreated
         ? <span title={`Edited ${getString(dateEdited)}`}> * </span>
