@@ -4,7 +4,6 @@
   right: 0;
   color: var(--tertiary-color);
   cursor: pointer;
-  font-size: .8em;
 }
 
 .menuButton:not(:hover) ul, .menuButton:hover:before {
@@ -20,7 +19,6 @@
 }
 
 .menuButton ul {
-  font-size: 19px;
   background: #121212;
   color: var(--primary-color);
 }
