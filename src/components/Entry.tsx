@@ -30,7 +30,6 @@ export default function Entry({
   function reportChanges() {
     if (pendingEntry.current) {
       onEdit({ ...pendingEntry.current })
-      pendingEntry.current = null
     }
   }
 
