@@ -40,11 +40,10 @@ export default function DateView({
   dateEdited: number
 }) {
   return (
-    <div className={styles.date} title={getLocaleString(dateEdited)}>
-      {getRelativeTimeString(dateEdited)}
-      {dateEdited !== dateCreated
-        ? <span title={`Created ${getRelativeTimeString(dateCreated)}`}> * </span>
-          : ' '}
+    <div
+      className={styles.date}
+      title={`Created ${getRelativeTimeString(dateCreated)}`}>
+        {getRelativeTimeString(dateEdited)}
     </div>
   )
 }
