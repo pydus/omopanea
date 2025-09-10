@@ -58,7 +58,8 @@ export default function Tags({
     <>
       <div className={styles.filterTags} onClick={onFilterTagClick}>
         {!focused
-          && filterTags.filter(tag => visibleTags.includes(tag)).join(', ') + ' '}
+          ? filterTags.filter(tag => visibleTags.includes(tag)).join(', ') + ' '
+            : ' '}
       </div>
       <div
         ref={inputRef}
