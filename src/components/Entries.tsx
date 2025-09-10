@@ -13,13 +13,15 @@ export default function Entries({
   onEdit: (entry: EntryType) => void,
   onRemove: (id: number) => void
 }) {
-  const entriesElements = entries.map(entry =>
-    <Entry
-      {...entry}
-      key={entry.id}
-      filterTags={filterTags}
-      onEdit={onEdit}
-      onRemove={onRemove} />)
+  const entriesElements = entries
+    .sort((a, b) => b.dateEdited - a.dateEdited)
+    .map(entry =>
+      <Entry
+        {...entry}
+        key={entry.id}
+        filterTags={filterTags}
+        onEdit={onEdit}
+        onRemove={onRemove} />)
 
   return (
     <>
