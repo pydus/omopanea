@@ -27,6 +27,11 @@ export function getRelativeTimeString(timestamp: number) {
   }
 }
 
+export function getLocaleString(timestamp: number) {
+  const date = new Date(timestamp)
+  return date.toLocaleString()
+}
+
 export default function DateView({
   dateCreated,
   dateEdited
@@ -34,11 +39,6 @@ export default function DateView({
   dateCreated: number,
   dateEdited: number
 }) {
-  function getLocaleString(timestamp: number) {
-    const date = new Date(timestamp)
-    return date.toLocaleString()
-  }
-
   return (
     <div className={styles.date} title={getLocaleString(dateCreated)}>
       {getRelativeTimeString(dateCreated)}
