@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { getEntries } from '../api'
 import { EntryType } from '../types'
 import EntryInput from './EntryInput'
@@ -8,6 +8,7 @@ import '../styles/style.css'
 export default function App() {
   const [ tags, setTags ] = useState<string[]>([])
   const [ entries, setEntries ] = useState<EntryType[]>([])
+  const pendingEntries = useRef<EntryType[]>([])
 
   useEffect(() => {
     getEntries().then(entries => setEntries(entries.reverse()))
@@ -15,11 +16,6 @@ export default function App() {
 
   function addEntry(entry: EntryType) {
     setEntries([ entry, ...entries ])
-  }
-
-  function editEntry(newEntry: EntryType) {
-    setEntries(entries.map(entry =>
-      entry.id === newEntry.id ? newEntry : entry))
   }
 
   function removeEntry(id: number) {
@@ -42,13 +38,30 @@ export default function App() {
     })
   }
 
+  function applyChanges() {
+    setEntries(entries.map(entry => pendingEntries.current.find(
+      pendingEntry => pendingEntry.id === entry.id) ?? entry))
+    pendingEntries.current = []
+  }
+
+  function addPendingEntry(entry: EntryType) {
+    pendingEntries.current = pendingEntries.current.filter(
+      pendingEntry => pendingEntry.id !== entry.id)
+    pendingEntries.current.push(entry)
+  }
+
+  function onNewTags(newTags: string[]) {
+    setTags(newTags)
+    applyChanges()
+  }
+
   return (
     <>
-      <EntryInput onNewEntry={addEntry} onNewTags={setTags} />
+      <EntryInput onNewEntry={addEntry} onNewTags={onNewTags} />
       <Entries
         entries={filterEntries(entries, tags)}
         filterTags={tags}
-        onEdit={editEntry}
+        onEdit={addPendingEntry}
         onRemove={removeEntry} />
     </>
   )

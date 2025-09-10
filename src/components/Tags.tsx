@@ -1,4 +1,4 @@
-import { getTags, arraysAreEqual } from '../util'
+import { arraysAreEqual, getTags } from '../util'
 import * as styles from '../styles/Tags.module.css'
 import { useRef, useState } from 'react'
 
@@ -13,16 +13,15 @@ export default function Tags({
   onChange: (tags: string[]) => void,
   onBlur: () => void
 }) {
+  const [ visibleTags, setVisibleTags ] = useState(tags)
   const [ focused, setFocused ] = useState(false)
+  const [ tagsString, setTagsString ] = useState<string | null>(null)
   const inputRef = useRef(null)
 
   function editTags(event) {
     const tagsString = event.target.innerText
     const newTags = getTags(tagsString)
-
-    if (!arraysAreEqual(tags, newTags)) {
-      onChange(newTags)
-    }
+    onChange(newTags)
   }
 
   function onKeyDown(event) {
@@ -31,11 +30,22 @@ export default function Tags({
     }
   }
 
-  function onFocus() {
+  function onFocus(event) {
+    const tagsString = event.target.innerText
+    setTagsString(tagsString)
     setFocused(true)
   }
 
-  function _onBlur() {
+  function _onBlur(event) {
+    const newTagsString = event.target.innerText
+    const newTags = getTags(newTagsString)
+
+    if (arraysAreEqual(newTags, visibleTags)) {
+      event.target.innerText = tagsString
+    }
+
+    setVisibleTags(newTags)
+    setTagsString(null)
     setFocused(false)
     onBlur()
   }
@@ -48,7 +58,7 @@ export default function Tags({
     <>
       <div className={styles.filterTags} onClick={onFilterTagClick}>
         {!focused
-          && filterTags.filter(tag => tags.includes(tag)).join(', ') + ' '}
+          && filterTags.filter(tag => visibleTags.includes(tag)).join(', ') + ' '}
       </div>
       <div
         ref={inputRef}
@@ -60,9 +70,9 @@ export default function Tags({
         suppressContentEditableWarning={true}
         contentEditable={true}>
           {focused
-            ? tags.join(', ')
-              : (tags.length > 0
-                ? tags.filter(tag => !filterTags.includes(tag)).join(', ')
+            ? visibleTags.join(', ')
+              : (visibleTags.length > 0
+                ? visibleTags.filter(tag => !filterTags.includes(tag)).join(', ')
                   : ' ')}
       </div>
     </>

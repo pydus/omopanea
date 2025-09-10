@@ -28,7 +28,7 @@ export default function Entry({
   const pendingEntry = useRef<EntryType | null>(null)
 
   function reportChanges() {
-    if (pendingEntry) {
+    if (pendingEntry.current) {
       onEdit({ ...pendingEntry.current })
       pendingEntry.current = null
     }
@@ -39,7 +39,7 @@ export default function Entry({
 
     const newEntry = {
       id,
-      tags,
+      tags: pendingEntry.current?.tags ?? tags,
       content: newContent,
       dateCreated,
       dateEdited: Date.now()
@@ -53,7 +53,7 @@ export default function Entry({
     const newEntry = {
       id,
       tags: newTags,
-      content,
+      content: pendingEntry.current?.content ?? content,
       dateCreated,
       dateEdited: Date.now()
     }
