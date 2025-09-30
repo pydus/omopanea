@@ -23,8 +23,11 @@ export default function App() {
   }
 
   function filterEntries(entries: EntryType[], tags: string[]) {
+    const hiddenEntryTagPrefix = '.'
+
     if (tags.length < 1) {
-      return entries
+      return entries.filter(entry =>
+        !entry.tags.find(tag => tag[0] === hiddenEntryTagPrefix))
     }
 
     return entries.filter(entry => {
